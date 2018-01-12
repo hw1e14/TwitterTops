@@ -2,24 +2,28 @@
   * Created by mrllover on 23/03/2017.
   */
 
+import com.typesafe.config.{Config, ConfigFactory}
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.streaming.StreamingContext
 import org.apache.spark.streaming._
 import org.apache.spark.streaming.twitter._
 
+
 object TwitterTopTags {
   def main(args: Array[String]): Unit = {
-    val config = new SparkConf().setAppName("twitter-stream-top-tags").setMaster("local[2]")
+    val conf: Config = ConfigFactory.load()
+    val config = new SparkConf().setAppName("twitter-stream-top-tags")
+            .setMaster("local[2]")
     val sc = new SparkContext(config)
     sc.setLogLevel("ERROR")
     //    sc.setLogLevel("WARN")
 
     val ssc = new StreamingContext(sc, Seconds(5))
 
-    System.setProperty("twitter4j.oauth.consumerKey", "***")
-    System.setProperty("twitter4j.oauth.consumerSecret", "***")
-    System.setProperty("twitter4j.oauth.accessToken", "***")
-    System.setProperty("twitter4j.oauth.accessTokenSecret", "***")
+    System.setProperty("twitter4j.oauth.consumerKey", conf.getString("dev.twitter.consumerKey"))
+    System.setProperty("twitter4j.oauth.consumerSecret", conf.getString("dev.twitter.consumerSecret"))
+    System.setProperty("twitter4j.oauth.accessToken", conf.getString("dev.twitter.accessToken"))
+    System.setProperty("twitter4j.oauth.accessTokenSecret", conf.getString("dev.twitter.accessTokenSecret"))
 
 
     val outputDirectory = "/twitter"

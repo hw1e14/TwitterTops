@@ -1,2 +1,5 @@
 secret.conf
 .idea/*
+target/
+wc.txt/
+metastore_db/
